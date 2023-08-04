@@ -1493,56 +1493,6 @@ rules.image = {
 function cleanAttribute(attribute) {
 	return attribute ? attribute.replace(/(\n+\s*)+/g, "\n") : "";
 }
-// function Rules(options) {
-//   this.options = options;
-//   this._keep = [];
-//   this._remove = [];
-//   this.blankRule = {
-//     replacement: options.blankReplacement
-//   };
-//   this.keepReplacement = options.keepReplacement;
-//   this.defaultRule = {
-//     replacement: options.defaultReplacement
-//   };
-//   this.array = [];
-//   for (var key in options.rules)
-//     this.array.push(options.rules[key]);
-// }
-// Rules.prototype = {
-//   add: function (key, rule) {
-//     this.array.unshift(rule);
-//   },
-//   keep: function (filter) {
-//     this._keep.unshift({
-//       filter,
-//       replacement: this.keepReplacement
-//     });
-//   },
-//   remove: function (filter) {
-//     this._remove.unshift({
-//       filter,
-//       replacement: function () {
-//         return "";
-//       }
-//     });
-//   },
-//   forNode: function (node) {
-//     if (node.isBlank)
-//       return this.blankRule;
-//     var rule;
-//     if (rule = findRule(this.array, node, this.options))
-//       return rule;
-//     if (rule = findRule(this._keep, node, this.options))
-//       return rule;
-//     if (rule = findRule(this._remove, node, this.options))
-//       return rule;
-//     return this.defaultRule;
-//   },
-//   forEach: function (fn2) {
-//     for (var i = 0; i < this.array.length; i++)
-//       fn2(this.array[i], i);
-//   }
-// };
 function findRule(rules2, node, options) {
 	for (var i = 0; i < rules2.length; i++) {
 		var rule = rules2[i];
@@ -1783,74 +1733,6 @@ var escapes = [
 	[/_/g, "\\_"],
 	[/^(\d+)\. /g, "$1\\. "],
 ];
-// function TurndownService2(options) {
-//   if (!(this instanceof TurndownService2))
-//     return new TurndownService2(options);
-//   var defaults = {
-//     rules,
-//     headingStyle: "setext",
-//     hr: "* * *",
-//     bulletListMarker: "*",
-//     codeBlockStyle: "indented",
-//     fence: "```",
-//     emDelimiter: "_",
-//     strongDelimiter: "**",
-//     linkStyle: "inlined",
-//     linkReferenceStyle: "full",
-//     br: "  ",
-//     preformattedCode: false,
-//     blankReplacement: function (content, node) {
-//       return node.isBlock ? "\n\n" : "";
-//     },
-//     keepReplacement: function (content, node) {
-//       return node.isBlock ? "\n\n" + node.outerHTML + "\n\n" : node.outerHTML;
-//     },
-//     defaultReplacement: function (content, node) {
-//       return node.isBlock ? "\n\n" + content + "\n\n" : content;
-//     }
-//   };
-//   this.options = extend({}, defaults, options);
-//   this.rules = new Rules(this.options);
-// }
-// TurndownService2.prototype = {
-//   turndown: function (input) {
-//     if (!canConvert(input)) {
-//       throw new TypeError(input + " is not a string, or an element/document/fragment node.");
-//     }
-//     if (input === "")
-//       return "";
-//     var output = process2.call(this, new RootNode(input, this.options));
-//     return postProcess.call(this, output);
-//   },
-//   use: function (plugin) {
-//     if (Array.isArray(plugin)) {
-//       for (var i = 0; i < plugin.length; i++)
-//         this.use(plugin[i]);
-//     } else if (typeof plugin === "function") {
-//       plugin(this);
-//     } else {
-//       throw new TypeError("plugin must be a Function or an Array of Functions");
-//     }
-//     return this;
-//   },
-//   addRule: function (key, rule) {
-//     this.rules.add(key, rule);
-//     return this;
-//   },
-//   keep: function (filter) {
-//     this.rules.keep(filter);
-//     return this;
-//   },
-//   remove: function (filter) {
-//     this.rules.remove(filter);
-//     return this;
-//   },
-//   escape: function (string) {
-//     return escapes.reduce(function (accumulator, escape) {
-//       return accumulator.replace(escape[0], escape[1]);
-//     }, string);
-//   }
-// };
 function process2(parentNode) {
 	var self = this;
 	return reduce.call(
@@ -1870,15 +1752,6 @@ function process2(parentNode) {
 		""
 	);
 }
-// function postProcess(output) {
-//   var self = this;
-//   this.rules.forEach(function (rule) {
-//     if (typeof rule.append === "function") {
-//       output = join(output, rule.append(self.options));
-//     }
-//   });
-//   return output.replace(/^[\t\r\n]+/, "").replace(/[\t\r\n\s]+$/, "");
-// }
 function replacementForNode(node) {
 	var rule = this.rules.forNode(node);
 	var content = process2.call(this, node);
@@ -1992,6 +1865,17 @@ var DEFAULT_SETTINGS = {
 	colourMagentaText: "{{highlight}}",
 	colourCustomHexValue: "#999999",
 	colourCustomHexText: "{{highlight}}",
+	colourYellow: "#F8DF81",
+	colourPurple: "#CC99C9",
+	colourRed: "#FF6961",
+	colourGreen: "#9BD0B7",
+	colourBlue: "#A7C7E7",
+	colourBlack: "#000000",
+	colourWhite: "#FFFFFF",
+	colourGray: "#B9B9B9",
+	colourOrange: "#F39539",
+	colourCyan: "#77DDFF",
+	colourMagenta: "#FF77FF",
 	multipleFieldsDivider: ";",
 	nameFormat: "[[{{firstName}} {{lastName}}]]",
 	highlightCitationsFormat: "Author, year, page number",
@@ -5532,7 +5416,7 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 			text: "Created by Stefano Pagliari",
 			href: "https://github.com/stefanopagliari/",
 		});
-		containerEl.createEl("h2", { text: "Import Library" });
+		containerEl.createEl("h3", { text: "Import Library" });
 		const importLibrary = containerEl.createEl("details");
 		importLibrary.setAttribute("open", "");
 		importLibrary.createEl("summary", { text: "" });
@@ -5553,7 +5437,7 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 						})
 					)
 			);
-		containerEl.createEl("h2", { text: "Export Notes" });
+		containerEl.createEl("h3", { text: "Export Notes" });
 		const settingsExport = containerEl.createEl("details");
 		settingsExport.setAttribute("open", "");
 		settingsExport.createEl("summary", { text: "" });
@@ -5736,7 +5620,7 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 					);
 			}
 		}
-		containerEl.createEl("h2", { text: "Update Library" });
+		containerEl.createEl("h3", { text: "Update Library" });
 		const settingsUpdate = containerEl.createEl("details");
 		settingsUpdate.setAttribute("open", "");
 		new import_obsidian5.Setting(settingsUpdate)
@@ -5761,8 +5645,8 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 					})
 				);
 			});
-		containerEl.createEl("h2", { text: "Format Annotations" });
-		containerEl.createEl("h3", { text: "In-text citations" });
+		containerEl.createEl("h3", { text: "Format Annotations" });
+		containerEl.createEl("h2", { text: "In-text citations" });
 		const settingsCitations = containerEl.createEl("details");
 		settingsCitations.setAttribute("open", "");
 		settingsCitations.createEl("summary", { text: "" });
@@ -5816,7 +5700,7 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 						})
 					)
 			);
-		containerEl.createEl("h3", { text: "Highlights" });
+		containerEl.createEl("h2", { text: "Highlights" });
 		const settingsHighlights = containerEl.createEl("details");
 		settingsHighlights.setAttribute("open", "");
 		settingsHighlights.createEl("summary", { text: "" });
@@ -5941,7 +5825,7 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 						})
 					)
 			);
-		containerEl.createEl("h3", { text: "Comments" });
+		containerEl.createEl("h2", { text: "Comments" });
 		const settingsComments = containerEl.createEl("details");
 		settingsComments.setAttribute("open", "");
 		settingsComments.createEl("summary", { text: "" });
@@ -6048,7 +5932,7 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 						})
 					)
 			);
-		containerEl.createEl("h3", { text: "Zotero Tags" });
+		containerEl.createEl("h2", { text: "Zotero Tags" });
 		const settingsTags = containerEl.createEl("details");
 		settingsTags.setAttribute("open", "");
 		settingsTags.createEl("summary", { text: "" });
@@ -6163,7 +6047,7 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 					})
 				)
 			);
-		containerEl.createEl("h3", { text: "Additional Transformations" });
+		containerEl.createEl("h2", { text: "Additional Transformations" });
 		const settingsAdvanced = containerEl.createEl("details");
 		settingsAdvanced.setAttribute("open", "");
 		settingsAdvanced.createEl("summary", { text: "" });
@@ -6340,7 +6224,11 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 					})
 				)
 			);
-		containerEl.createEl("h3", { text: "Highlight Color" });
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// SELECT COLOR Transform
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		containerEl.createEl("h2", { text: "Highlight Color Transform" });
+
 		const settingsColour = containerEl.createEl("details");
 		settingsColour.setAttribute("open", "");
 		settingsColour.createEl("summary", { text: "" });
@@ -6490,10 +6378,144 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 					})
 				)
 			);
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// SELECT COLOR VALUE
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		containerEl.createEl("h2", { text: "Highlight Color" });
+		const settingsColourValue = containerEl.createEl("details");
+		settingsColourValue.setAttribute("open", "");
+		settingsColourValue.createEl("summary", { text: "" });
+		new import_obsidian5.Setting(settingsColourValue).setDesc(
+			"Select the color of the highlights"
+		);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("Yellow")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourYellow).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourYellow = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("Red")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourRed).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourRed = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("Green")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourGreen).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourGreen = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("Blue")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourBlue).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourBlue = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("Purple")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourPurple).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourPurple = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("Black")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourBlack).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourBlack = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("White")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourWhite).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourWhite = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("Gray")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourGray).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourGray = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("Orange")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourOrange).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourOrange = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("Cyan")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourCyan).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourCyanText = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+		new import_obsidian5.Setting(settingsColourValue)
+			.setName("Magenta")
+			.setDesc("")
+			.addText((text) =>
+				text.setValue(settings.colourMagenta).onChange((value) =>
+					__async(this, null, function* () {
+						settings.colourMagenta = value;
+						yield plugin.saveSettings();
+					})
+				)
+			);
+
 		containerEl.createEl("h2", { text: "Import Images" });
 		const importImages = containerEl.createEl("details");
 		importImages.setAttribute("open", "");
 		importImages.createEl("summary", { text: "" });
+
 		new import_obsidian5.Setting(importImages)
 			.setName("Import Images")
 			.setDesc(
@@ -6571,7 +6593,7 @@ var SettingTab = class extends import_obsidian5.PluginSettingTab {
 					);
 				});
 		}
-		containerEl.createEl("h2", { text: "Debugging" });
+		containerEl.createEl("h3", { text: "Debugging" });
 		const debugSettings = containerEl.createEl("details");
 		debugSettings.setAttribute("open", "");
 		debugSettings.createEl("summary", { text: "" });
@@ -6955,13 +6977,6 @@ var MyPlugin = class extends import_obsidian6.Plugin {
 	}
 
 	parseAnnotationLinesintoElementsZotfile(note) {
-		// Define the colors
-		const YELLOW = "#f8df81";
-		const RED = "#FF6961";
-		const GREEN = "#9BD0B7";
-		const BLUE = "#A7C7E7";
-		const GRAY = "#EDEDED";
-
 		const lines = note.split(/<p>/gm);
 		const noteElements = [];
 		for (let indexLines = 0; indexLines < lines.length; indexLines++) {
@@ -7022,43 +7037,43 @@ var MyPlugin = class extends import_obsidian6.Plugin {
 				);
 			}
 			if (extractedText.startsWith("(Yellow) - ")) {
-				lineElements.highlightColour = YELLOW;
+				lineElements.highlightColour = this.settings.colourYellow;
 				extractedText = extractedText.replace("(Yellow) - ", "");
 			}
 			if (extractedText.startsWith("(Black) - ")) {
-				lineElements.highlightColour = "black";
+				lineElements.highlightColour = this.settings.colourBlack;
 				extractedText = extractedText.replace("(Black) - ", "");
 			}
 			if (extractedText.startsWith("(White) - ")) {
-				lineElements.highlightColour = "white";
+				lineElements.highlightColour = this.settings.colourWhite;
 				extractedText = extractedText.replace("(White) - ", "");
 			}
 			if (extractedText.startsWith("(Gray) - ")) {
-				lineElements.highlightColour = "gray";
+				lineElements.highlightColour = this.settings.colourGray;
 				extractedText = extractedText.replace("(Gray) - ", "");
 			}
 			if (extractedText.startsWith("(Red) - ")) {
-				lineElements.highlightColour = RED;
+				lineElements.highlightColour = this.settings.colourRed;
 				extractedText = extractedText.replace("(Red) - ", "");
 			}
 			if (extractedText.startsWith("(Orange) - ")) {
-				lineElements.highlightColour = "orange";
+				lineElements.highlightColour = this.settings.colourOrange;
 				extractedText = extractedText.replace("(Orange) - ", "");
 			}
 			if (extractedText.startsWith("(Green) - ")) {
-				lineElements.highlightColour = GREEN;
+				lineElements.highlightColour = this.settings.colourGreen;
 				extractedText = extractedText.replace("(Green) - ", "");
 			}
 			if (extractedText.startsWith("(Cyan) - ")) {
-				lineElements.highlightColour = "cyan";
+				lineElements.highlightColour = this.settings.colourCyan;
 				extractedText = extractedText.replace("(Cyan) - ", "");
 			}
 			if (extractedText.startsWith("(Blue) - ")) {
-				lineElements.highlightColour = BLUE;
+				lineElements.highlightColour = this.settings.colourBlue;
 				extractedText = extractedText.replace("(Blue) - ", "");
 			}
 			if (extractedText.startsWith("(Magenta) - ")) {
-				lineElements.highlightColour = "magenta";
+				lineElements.highlightColour = this.settings.colourMagenta;
 				extractedText = extractedText.replace("(Magenta) - ", "");
 			}
 			lineElements.zoteroBackLink = "";
@@ -7503,17 +7518,17 @@ var MyPlugin = class extends import_obsidian6.Plugin {
 			return lineElements;
 		}
 		if (lineElements.highlightColour.includes("#ffd400")) {
-			lineElements.highlightColour = "#f8df81";
+			lineElements.highlightColour = this.settings.colourYellow;
 		} else if (lineElements.highlightColour.includes("#ff6666")) {
-			lineElements.highlightColour = "#FF6961";
+			lineElements.highlightColour = this.settings.colourRed;
 		} else if (lineElements.highlightColour.includes("#5fb236")) {
-			lineElements.highlightColour = "#9BD0B7";
+			lineElements.highlightColour = this.settings.colourGreen;
 		} else if (lineElements.highlightColour.includes("#2ea8e5")) {
-			lineElements.highlightColour = "#A7C7E7";
+			lineElements.highlightColour = this.settings.colourBlue;
 		} else if (lineElements.highlightColour.includes("#a28ae5")) {
-			lineElements.highlightColour = "#d5b6d5";
+			lineElements.highlightColour = this.settings.colourPurple;
 		} else if (lineElements.highlightColour.includes("#808080")) {
-			lineElements.highlightColour = "#EDEDED";
+			lineElements.highlightColour = this.settings.colourGray;
 		} else if (
 			lineElements.highlightColour.includes(
 				this.settings.colourCustomHexValue
@@ -7537,85 +7552,87 @@ var MyPlugin = class extends import_obsidian6.Plugin {
 					lineElements.highlightColour.includes(colorStr)
 				)
 			) {
-				lineElements.highlightColour = "black";
+				lineElements.highlightColour = this.settings.colourBlack;
 			} else if (
 				["##FFFFFF", "#ffffff"].some((colorStr) =>
 					lineElements.highlightColour.includes(colorStr)
 				)
 			) {
-				lineElements.highlightColour = "white";
+				lineElements.highlightColour = this.settings.colourWhite;
 			} else if (
 				["##808080", "#808080"].some((colorStr) =>
 					lineElements.highlightColour.includes(colorStr)
 				)
 			) {
-				lineElements.highlightColour = "#EDEDED";
+				lineElements.highlightColour = this.settings;
 			} else if (
 				["##FF0000", "#ff0000"].some((colorStr) =>
 					lineElements.highlightColour.includes(colorStr)
 				)
 			) {
-				lineElements.highlightColour = "#f6aa90";
+				lineElements.highlightColour = this.settings.colourRed;
 			} else if (
 				["##FFA500", "#ffa500"].some((colorStr) =>
 					lineElements.highlightColour.includes(colorStr)
 				)
 			) {
-				lineElements.highlightColour = "orange";
+				lineElements.highlightColour = this.settings.colourOrange;
 			} else if (
 				["##FFFF00", "#ffff00"].some((colorStr) =>
 					lineElements.highlightColour.includes(colorStr)
 				)
 			) {
-				lineElements.highlightColour = "#f8df81";
+				lineElements.highlightColour = this.settings.colourYellow;
 			} else if (
 				["##00FF00", "#008000", "#00ff00"].some((colorStr) =>
 					lineElements.highlightColour.includes(colorStr)
 				)
 			) {
-				lineElements.highlightColour = "#9BD0B7";
+				lineElements.highlightColour = this.settings.colourGreen;
 			} else if (
 				["##00FFFF", "#00ffff"].some((colorStr) =>
 					lineElements.highlightColour.includes(colorStr)
 				)
 			) {
-				lineElements.highlightColour = "cyan";
+				lineElements.highlightColour = this.settings.colourCyan;
 			} else if (
 				["##0000FF", "#0000ff"].some((colorStr) =>
 					lineElements.highlightColour.includes(colorStr)
 				)
 			) {
-				lineElements.highlightColour = "#A7C7E7";
+				lineElements.highlightColour = this.settings.colourBlue;
 			} else if (
 				["##FF00FF", "#800080", "#ff00ff"].some((colorStr) =>
 					lineElements.highlightColour.includes(colorStr)
 				)
 			) {
-				lineElements.highlightColour = "magenta";
+				lineElements.highlightColour = this.settings.colourMagenta;
 			}
 		}
 		let colourTransformation = "";
-		if (lineElements.highlightColour == "#f8df81") {
+		if (lineElements.highlightColour == this.settings.colourYellow) {
 			colourTransformation = this.settings.colourYellowText;
-		} else if (lineElements.highlightColour == "#FF6961") {
+		} else if (lineElements.highlightColour == this.settings.colourRed) {
 			colourTransformation = this.settings.colourRedText;
-		} else if (lineElements.highlightColour == "#9BD0B7") {
+		} else if (lineElements.highlightColour == this.settings.colourGreen) {
 			colourTransformation = this.settings.colourGreenText;
-		} else if (lineElements.highlightColour == "#A7C7E7") {
+		} else if (lineElements.highlightColour == this.settings.colourBlue) {
 			colourTransformation = this.settings.colourBlueText;
-		} else if (lineElements.highlightColour == "#d5b6d5") {
+		} else if (lineElements.highlightColour == this.settings.colourPurple) {
 			colourTransformation = this.settings.colourPurpleText;
-		} else if (lineElements.highlightColour == "black") {
+		} else if (lineElements.highlightColour == this.settings.colourBlack) {
 			colourTransformation = this.settings.colourBlackText;
-		} else if (lineElements.highlightColour == "white") {
+		} else if (lineElements.highlightColour == this.settings.colourWhite) {
 			colourTransformation = this.settings.colourWhiteText;
-		} else if (lineElements.highlightColour == "#EDEDED") {
+		} else if (lineElements.highlightColour == this.settings.colourGray) {
 			colourTransformation = this.settings.colourGrayText;
-		} else if (lineElements.highlightColour == "orange") {
+		} else if (lineElements.highlightColour == this.settings.colourOrange) {
 			colourTransformation = this.settings.colourOrangeText;
-		} else if (lineElements.highlightColour == "cyan") {
+		} else if (lineElements.highlightColour == this.settings.colourCyan) {
 			colourTransformation = this.settings.colourCyanText;
-		} else if (lineElements.highlightColour == "magenta") {
+		} else if (
+			lineElements.highlightColour == this.settings.colourMagenta
+		) {
 			colourTransformation = this.settings.colourMagentaText;
 		} else if (lineElements.highlightColour == "customHex") {
 			colourTransformation = this.settings.colourCustomHexText;
